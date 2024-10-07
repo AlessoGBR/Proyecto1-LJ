@@ -36,15 +36,12 @@ public enum TokenEnumCSS {
     SECTION("section"),
     ARTICLE("article"),
     FOOTER("footer"),
-    // Selectores de clase e id
     CLASS_SELECTOR(".class-selector"),
     ID_SELECTOR("#id-selector"),
-    // Combinadores
     DESCENDANT(" "),
     CHILD(">"),
     ADJACENT_SIBLING("+"),
     GENERAL_SIBLING("~"),
-    // Reglas CSS
     COLOR("color"),
     BACKGROUND_COLOR("background-color"),
     BACKGROUND("background"),
@@ -95,14 +92,12 @@ public enum TokenEnumCSS {
     FLOAT("float"),
     LIST_STYLE("list-style"),
     BOX_SHADOW("box-shadow"),
-    // Unidades de medida y colores
     PX("px"),
     PERCENTAGE("%"),
     REM("rem"),
     EM("em"),
     VW("vw"),
     VH("vh"),
-    // Pseudo-clases y pseudo-elementos
     HOVER(":hover"),
     ACTIVE(":active"),
     NOT(":not"),
@@ -111,17 +106,16 @@ public enum TokenEnumCSS {
     EVEN(":even"),
     BEFORE("::before"),
     AFTER("::after"),
-    // Otros
     RGBA("rgba"),
     HEX_COLOR("#hex"),
-    // Símbolos
     COLON(":"),
     SEMICOLON(";"),
     COMMA(","),
     BRACKET_OPEN("{"),
     BRACKET_CLOSE("}"),
     PARENTHESIS_OPEN("("),
-    PARENTHESIS_CLOSE(")");
+    PARENTHESIS_CLOSE(")"),
+    ERROR("");
 
     private final String token;
 

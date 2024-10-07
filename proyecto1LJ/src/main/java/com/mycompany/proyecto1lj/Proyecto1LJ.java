@@ -4,6 +4,9 @@
 
 package com.mycompany.proyecto1lj;
 
+import com.mycompany.proyecto1lj.frontend.MenuPrincipal;
+
+
 /**
  *
  * @author alesso
@@ -11,6 +14,7 @@ package com.mycompany.proyecto1lj;
 public class Proyecto1LJ {
 
     public static void main(String[] args) {
-        System.out.println("Hello World!");
+        MenuPrincipal menu  = new MenuPrincipal();
+        menu.setVisible(true);
     }
 }

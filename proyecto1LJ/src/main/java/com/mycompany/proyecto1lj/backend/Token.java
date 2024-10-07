@@ -4,7 +4,9 @@
  */
 package com.mycompany.proyecto1lj.backend;
 
+import com.mycompany.proyecto1lj.backend.CSS.TokenEnumCSS;
 import com.mycompany.proyecto1lj.backend.HTML.TokenEnumHTML;
+import com.mycompany.proyecto1lj.backend.JS.TokenEnumJS;
 
 /**
  *
@@ -12,26 +14,59 @@ import com.mycompany.proyecto1lj.backend.HTML.TokenEnumHTML;
  */
 public class Token {
 
-    private final TokenEnumHTML type;
-    private final String value;
+    private TokenEnumHTML typeHTML;
+    private TokenEnumCSS typeCSS;
+    private TokenEnumJS typeJS;
+    private String value;
 
     public Token(TokenEnumHTML type, String value) {
-        this.type = type;
+        this.typeHTML = type;
         this.value = value;
     }
 
-    public TokenEnumHTML getType() {
-        return type;
+    public Token(TokenEnumCSS type, String value) {
+        this.typeCSS = type;
+        this.value = value;
+    }
+
+    public Token(String valor, TokenEnumJS typeJS) {
+        this.typeJS = typeJS;
+        this.value = valor;
+    }
+
+    public TokenEnumHTML getTypeHTML() {
+        return typeHTML;
+    }
+
+    public TokenEnumCSS getTypeCSS() {
+        return typeCSS;
+    }
+
+    public TokenEnumJS getTypeJS() {
+        return typeJS;
     }
 
     public String getValue() {
         return value;
     }
 
-    @Override
-    public String toString() {
+    public String toStringHTML() {
         return "Token{"
-                + "type=" + type
+                + "type=" + typeHTML
+                + ", value='" + value + '\''
+                + '}';
+    }
+    
+    public String toStringCSS() {
+        return "Token{"
+                + "type=" + typeCSS
+                + ", value='" + value + '\''
+                + '}';
+    }
+    
+    public String toStringJS() {
+        return "Token{"
+                + "type=" + typeJS
                 + ", value='" + value + '\''
                 + '}';
     }

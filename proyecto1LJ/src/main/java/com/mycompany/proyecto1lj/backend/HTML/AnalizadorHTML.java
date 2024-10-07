@@ -14,118 +14,245 @@ import java.util.List;
  */
 public class AnalizadorHTML {
 
-    public String procesarLinea(String linea) {
-        StringBuilder resultado = new StringBuilder();
-        List<String> tokens = tokenizar(linea);
+    private String input;
+    private int index;
+    private List<Token> tokens;  // Cambia de ArrayList<String> a ArrayList<Token>
 
-        for (String token : tokens) {
-            resultado.append(traducirToken(token)).append(" ");
-        }
-
-        return resultado.toString().trim();
+    public AnalizadorHTML(String input) {
+        this.input = input;
+        this.index = 0;
+        this.tokens = new ArrayList<>();  // Inicializa la lista de tokens
     }
 
-    private List<String> tokenizar(String linea) {
-        List<String> tokens = new ArrayList<>();
-        
-        for (String token : linea.split(" ")) {
-            tokens.add(token.trim());
+    public void analizar() {
+        while (index < this.input.length()) {
+            avanzar();
         }
+
+    }
+
+    private void avanzar() {
+        if (index >= input.length()) {
+            return;
+        }
+
+        char actual = input.charAt(index);
+
+        switch (actual) {
+            case '<':
+                if (!tokens.isEmpty() && tokens.get(tokens.size() - 1).getTypeHTML() == TokenEnumHTML.APERTURA) {
+                    // No agregar un nuevo token de apertura si ya existe uno consecutivo
+                    index++;
+                    identificarElemento();
+                } else {
+                    tokens.add(new Token(TokenEnumHTML.APERTURA, "<"));  // Agrega el token a la lista
+                    System.out.println("Token encontrado: <");
+                    index++;
+                    identificarElemento();
+                }
+                break;
+
+            case '>':
+                if (!tokens.isEmpty() && tokens.get(tokens.size() - 1).getTypeHTML() == TokenEnumHTML.CIERRE) {
+                    // No agregar un nuevo token de cierre si ya existe uno consecutivo
+                    index++;
+                } else {
+                    tokens.add(new Token(TokenEnumHTML.CIERRE, ">"));  // Agrega el token a la lista
+                    System.out.println("Token encontrado: >");
+                    index++;
+                }
+                break;
+
+            case '/':
+                if (!tokens.isEmpty() && tokens.get(tokens.size() - 1).getTypeHTML() == TokenEnumHTML.DIAGONAL) {
+                    // No agregar un nuevo token diagonal si ya existe uno consecutivo
+                    index++;
+                } else {
+                    tokens.add(new Token(TokenEnumHTML.DIAGONAL, "/"));  // Agrega el token a la lista
+                    System.out.println("Token encontrado: /");
+                    index++;
+                }
+                break;
+
+            case '=':
+                tokens.add(new Token(TokenEnumHTML.PALABRA_RESERVADA_IGUAL, "="));  // Agrega el token a la lista
+                System.out.println("Token encontrado: =");
+                index++;
+                break;
+
+            default:
+                identificarTexto();
+                break;
+        }
+    }
+
+    private void identificarElemento() {
+        StringBuilder tokenString = new StringBuilder();
+
+        while (index < input.length() && input.charAt(index) != ' ' && input.charAt(index) != '>' && input.charAt(index) != '=' && input.charAt(index) != '/') {
+            tokenString.append(input.charAt(index));
+            index++;
+        }
+
+        String token = tokenString.toString();
+        TokenEnumHTML tipoToken = obtenerTipoToken(token);
+
+        // Solo agrega el token si no es repetido
+        if (tokens.isEmpty() || tokens.get(tokens.size() - 1).getTypeHTML() != tipoToken) {
+            tokens.add(new Token(tipoToken, token));  // Agrega el token a la lista
+            System.out.println("Token encontrado: " + tipoToken.getToken());
+        }
+
+        if (input.charAt(index) == ' ') {
+            identificarAtributos();
+        }
+
+        if (index < input.length() && input.charAt(index) == '/') {
+            tokens.add(new Token(TokenEnumHTML.DIAGONAL, "/"));  // Agrega el token a la lista
+            System.out.println("Token encontrado: /");
+            index++;
+        }
+
+        if (index < input.length() && input.charAt(index) == '>') {
+            tokens.add(new Token(TokenEnumHTML.CIERRE, ">"));  // Agrega el token a la lista
+            System.out.println("Token encontrado: >");
+            index++;
+        }
+    }
+
+    private TokenEnumHTML obtenerTipoToken(String token) {
+        return switch (token) {
+            case "principal" ->
+                TokenEnumHTML.PRINCIPAL;
+            case "encabezado" ->
+                TokenEnumHTML.ENCABEZADO;
+            case "navegacion" ->
+                TokenEnumHTML.NAVEGACION;
+            case "apartado" ->
+                TokenEnumHTML.APARTADO;
+            case "listaordenada" ->
+                TokenEnumHTML.LISTA_ORDENADA;
+            case "listadesordenada" ->
+                TokenEnumHTML.LISTA_DESORDENADA;
+            case "itemlista" ->
+                TokenEnumHTML.ITEM;
+            case "anclaje" ->
+                TokenEnumHTML.ANCLAJE;
+            case "contenedor" ->
+                TokenEnumHTML.CONTENEDOR;
+            case "seccion" ->
+                TokenEnumHTML.SECCION;
+            case "articulo" ->
+                TokenEnumHTML.ARTICULO;
+            case "titulo1" ->
+                TokenEnumHTML.TITULO1;
+            case "titulo2" ->
+                TokenEnumHTML.TITULO2;
+            case "titulo3" ->
+                TokenEnumHTML.TITULO3;
+            case "titulo4" ->
+                TokenEnumHTML.TITULO4;
+            case "titulo5" ->
+                TokenEnumHTML.TITULO5;
+            case "titulo6" ->
+                TokenEnumHTML.TITULO6;
+            case "parrafo" ->
+                TokenEnumHTML.PARRAFO;
+            case "span" ->
+                TokenEnumHTML.SPAN;
+            case "entrada" ->
+                TokenEnumHTML.ENTRADA;
+            case "formulario" ->
+                TokenEnumHTML.FORMULARIO;
+            case "label" ->
+                TokenEnumHTML.LABEL;
+            case "area" ->
+                TokenEnumHTML.AREA;
+            case "boton" ->
+                TokenEnumHTML.BOTON;
+            case "piepagina" ->
+                TokenEnumHTML.PIE_PAGINA;
+            default ->
+                TokenEnumHTML.ERROR;
+        };
+    }
+
+    private void identificarAtributos() {
+        while (index < input.length() && input.charAt(index) == ' ') {
+            index++;
+        }
+
+        while (index < input.length() && input.charAt(index) != '>' && input.charAt(index) != '/') {
+            StringBuilder atributo = new StringBuilder();
+            StringBuilder valorAtributo = new StringBuilder();
+
+            while (index < input.length() && input.charAt(index) != '=' && input.charAt(index) != ' ' && input.charAt(index) != '>') {
+                atributo.append(input.charAt(index));
+                index++;
+            }
+
+            if (atributo.length() > 0) {
+                tokens.add(new Token(TokenEnumHTML.ATRIBUTO, atributo.toString()));  // Agrega el token de atributo a la lista
+                System.out.println("Token de atributo encontrado: " + atributo.toString());
+            }
+
+            if (index < input.length() && input.charAt(index) == '=') {
+                tokens.add(new Token(TokenEnumHTML.PALABRA_RESERVADA_IGUAL, "="));  // Agrega el token para '=' a la lista
+                System.out.println("Token encontrado: =");
+                index++;
+
+                if (index < input.length() && input.charAt(index) == '"') {
+                    index++;
+                    while (index < input.length() && input.charAt(index) != '"') {
+                        valorAtributo.append(input.charAt(index));
+                        index++;
+                    }
+                    index++;
+                }
+
+                if (valorAtributo.length() > 0) {
+                    tokens.add(new Token(TokenEnumHTML.VALOR_ATRIBUTO, valorAtributo.toString()));  // Agrega el token de valor de atributo a la lista
+                    System.out.println("Token de valor de atributo encontrado: " + valorAtributo.toString());
+                }
+            }
+
+            while (index < input.length() && input.charAt(index) == ' ') {
+                index++;
+            }
+        }
+    }
+
+    private void identificarTexto() {
+        StringBuilder texto = new StringBuilder();
+        boolean espacioEncontrado = false;
+
+        while (index < input.length() && input.charAt(index) != '<') {
+            char actual = input.charAt(index);
+
+            if (actual != ' ') {
+                if (espacioEncontrado) {
+                    texto.append(' ');
+                    espacioEncontrado = false;
+                }
+                texto.append(actual);
+            } else {
+                espacioEncontrado = true;
+            }
+            index++;
+        }
+
+        if (texto.length() > 0 && texto.charAt(texto.length() - 1) == ' ') {
+            texto.deleteCharAt(texto.length() - 1);
+        }
+
+        if (texto.length() > 0) {
+            tokens.add(new Token(TokenEnumHTML.TEXTO, texto.toString()));  // Agrega el token de texto a la lista
+            System.out.println("Texto encontrado: " + texto.toString());
+        }
+    }
+
+    public List<Token> getTokens() {
         return tokens;
     }
 
-    private String traducirToken(String token) {
-        // Aquí se traduce el token basado en el enum de HTML
-        switch (token) {
-            case "<principal>":
-                return TokenEnumHTML.PRINCIPAL_OPEN.getToken();
-            case "</principal>":
-                return TokenEnumHTML.PRINCIPAL_CLOSE.getToken();
-            case "<encabezado>":
-                return TokenEnumHTML.ENCABEZADO_OPEN.getToken();
-            case "</encabezado>":
-                return TokenEnumHTML.ENCABEZADO_CLOSE.getToken();
-            case "<navegacion>":
-                return TokenEnumHTML.NAVEGACION_OPEN.getToken();
-            case "</navegacion>":
-                return TokenEnumHTML.NAVEGACION_CLOSE.getToken();
-            case "<apartado>":
-                return TokenEnumHTML.APARTADO_OPEN.getToken();
-            case "</apartado>":
-                return TokenEnumHTML.APARTADO_CLOSE.getToken();
-            case "<listaordenada>":
-                return TokenEnumHTML.LISTAORDENADA_OPEN.getToken();
-            case "</listaordenada>":
-                return TokenEnumHTML.LISTAORDENADA_CLOSE.getToken();
-            case "<listadesordenada>":
-                return TokenEnumHTML.LISTADESORDENADA_OPEN.getToken();
-            case "</listadesordenada>":
-                return TokenEnumHTML.LISTADESORDENADA_CLOSE.getToken();
-            case "<itemlista>":
-                return TokenEnumHTML.ITEMLISTA_OPEN.getToken();
-            case "</itemlista>":
-                return TokenEnumHTML.ITEMLISTA_CLOSE.getToken();
-            case "<anclaje>":
-                return TokenEnumHTML.ANCLAJE_OPEN.getToken();
-            case "</anclaje>":
-                return TokenEnumHTML.ANCLAJE_CLOSE.getToken();
-            case "<contenedor>":
-                return TokenEnumHTML.CONTENEDOR_OPEN.getToken();
-            case "</contenedor>":
-                return TokenEnumHTML.CONTENEDOR_CLOSE.getToken();
-            case "<seccion>":
-                return TokenEnumHTML.SECCION_OPEN.getToken();
-            case "</seccion>":
-                return TokenEnumHTML.SECCION_CLOSE.getToken();
-            case "<articulo>":
-                return TokenEnumHTML.ARTICULO_OPEN.getToken();
-            case "</articulo>":
-                return TokenEnumHTML.ARTICULO_CLOSE.getToken();
-            case "<titulo1>":
-                return TokenEnumHTML.TITULO1_OPEN.getToken();
-            case "<titulo2>":
-                return TokenEnumHTML.TITULO2_OPEN.getToken();
-            case "<titulo3>":
-                return TokenEnumHTML.TITULO3_OPEN.getToken();
-            case "<titulo4>":
-                return TokenEnumHTML.TITULO4_OPEN.getToken();
-            case "<titulo5>":
-                return TokenEnumHTML.TITULO5_OPEN.getToken();
-            case "<titulo6>":
-                return TokenEnumHTML.TITULO6_OPEN.getToken();
-            case "<parrafo>":
-                return TokenEnumHTML.PARRAFO_OPEN.getToken();
-            case "</parrafo>":
-                return TokenEnumHTML.PARRAFO_CLOSE.getToken();
-            case "<span>":
-                return TokenEnumHTML.SPAN_OPEN.getToken();
-            case "</span>":
-                return TokenEnumHTML.SPAN_CLOSE.getToken();
-            case "<entrada/>":
-                return TokenEnumHTML.ENTRADA_SELF.getToken();
-            case "<formulario>":
-                return TokenEnumHTML.FORMULARIO_OPEN.getToken();
-            case "</formulario>":
-                return TokenEnumHTML.FORMULARIO_CLOSE.getToken();
-            case "<label>":
-                return TokenEnumHTML.LABEL_OPEN.getToken();
-            case "</label>":
-                return TokenEnumHTML.LABEL_CLOSE.getToken();
-            case "<area/>":
-                return TokenEnumHTML.AREA_SELF.getToken();
-            case "<boton>":
-                return TokenEnumHTML.BOTON_OPEN.getToken();
-            case "</boton>":
-                return TokenEnumHTML.BOTON_CLOSE.getToken();
-            case "<piepagina>":
-                return TokenEnumHTML.PIEPAGINA_OPEN.getToken();
-            case "</piepagina>":
-                return TokenEnumHTML.PIEPAGINA_CLOSE.getToken();
-            default:
-                if (token.startsWith("<") && token.endsWith("/>")) {
-                    return token; 
-                }
-                return token; 
-        }
-    }
 }

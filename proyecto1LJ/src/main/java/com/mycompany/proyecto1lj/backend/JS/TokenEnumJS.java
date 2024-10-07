@@ -54,7 +54,9 @@ public enum TokenEnumJS {
     PUNTO_Y_COMA(";"),
     COMA(","),
     PUNTO("."),
-    DOS_PUNTOS(":");
+    DOS_PUNTOS(":"),
+    COMENTARIO("");
+    
     
 
     private final String token;
