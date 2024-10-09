@@ -4,59 +4,115 @@
  */
 package com.mycompany.proyecto1lj.backend.HTML;
 
+import com.mycompany.proyecto1lj.backend.Token;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  *
  * @author alesso
  */
 public class TraductorHTML {
 
-    public String traducir(String html) {
+    private static final HashMap<String, String> traducciones;
+
+    static {
+        traducciones = new HashMap<>();
+        traducciones.put("principal", "main");
+        traducciones.put("encabezado", "header");
+        traducciones.put("navegacion", "nav");
+        traducciones.put("apartado", "aside");
+        traducciones.put("listaordenada", "ul");
+        traducciones.put("listadesordenada", "ol");
+        traducciones.put("itemlista", "li");
+        traducciones.put("anclaje", "a");
+        traducciones.put("contenedor", "div");
+        traducciones.put("seccion", "section");
+        traducciones.put("articulo", "article");
+        traducciones.put("titulo1", "h1");
+        traducciones.put("titulo2", "h2");
+        traducciones.put("titulo3", "h3");
+        traducciones.put("titulo4", "h4");
+        traducciones.put("titulo5", "h5");
+        traducciones.put("titulo6", "h6");
+        traducciones.put("parrafo", "p");
+        traducciones.put("span", "span");
+        traducciones.put("entrada", "input");
+        traducciones.put("formulario", "form");
+        traducciones.put("label", "label");
+        traducciones.put("area", "textarea");
+        traducciones.put("boton", "button");
+        traducciones.put("piepagina", "footer");
+    }
+
+    public String traducir(List<Token> tokens) {
         StringBuilder resultado = new StringBuilder();
-        StringBuilder etiqueta = new StringBuilder();
-        boolean dentroDeEtiqueta = false;
+        boolean esEtiquetaDeCierre = false;
+        String nombreEtiqueta = "";
 
-        for (char c : html.toCharArray()) {
-            if (c == '<') {
-                // Cuando encontramos '<', comenzamos una nueva etiqueta
-                dentroDeEtiqueta = true;
-                etiqueta.setLength(0); // Limpiamos el contenido de la etiqueta
-            }
+        for (Token token : tokens) {
+            TokenEnumHTML tipo = token.getTypeHTML();
+            String valor = token.getValue();
 
-            if (dentroDeEtiqueta) {
-                etiqueta.append(c); // Agregamos el carácter a la etiqueta
+            switch (tipo) {
+                case APERTURA:
+                    resultado.append("<");
+                    esEtiquetaDeCierre = false;
+                    break;
 
-                if (c == '>') {
-                    // Cuando encontramos '>', terminamos la etiqueta
-                    String etiquetaCompleta = etiqueta.toString();
-                    String etiquetaTraducida = traducirEtiqueta(etiquetaCompleta);
-                    resultado.append(etiquetaTraducida);
-                    dentroDeEtiqueta = false; // Salimos de la etiqueta
-                }
-            } else {
-                // Si no estamos dentro de una etiqueta, agregamos el carácter al resultado
-                resultado.append(c);
+                case CIERRE:
+                    resultado.append(">");
+                    break;
+
+                case DIAGONAL:
+                    esEtiquetaDeCierre = true;
+                    resultado.insert(resultado.length() - nombreEtiqueta.length(), "/");
+                    break;
+
+                case VALOR_ATRIBUTO:
+                    resultado.append("\"").append(valor).append("\"");
+                    break;
+
+                case ATRIBUTO:
+                    resultado.append(" ").append(valor);
+                    break;
+
+                case PRINCIPAL:
+                case ENCABEZADO:
+                case NAVEGACION:
+                case APARTADO:
+                case LISTA_ORDENADA:
+                case LISTA_DESORDENADA:
+                case ITEM:
+                case ANCLAJE:
+                case CONTENEDOR:
+                case SECCION:
+                case ARTICULO:
+                case PARRAFO:
+                case TITULO1:
+                case TITULO2:
+                case TITULO3:
+                case TITULO4:
+                case TITULO5:
+                case TITULO6:
+                case SPAN:
+                case ENTRADA:
+                case FORMULARIO:
+                case LABEL:
+                case AREA:
+                case BOTON:
+                case PIE_PAGINA:
+                    nombreEtiqueta = traducciones.getOrDefault(valor, valor); 
+                    resultado.append(nombreEtiqueta); 
+                    break;
+
+                default:
+                    resultado.append(valor); 
+                    break;
             }
         }
 
-        return resultado.toString(); // Devolvemos el HTML traducido
+        return resultado.toString();
     }
 
-    // Método que traduce la etiqueta usando el enum
-    private String traducirEtiqueta(String etiqueta) {
-        // Extraemos el nombre de la etiqueta (sin atributos)
-        String nombreEtiqueta = etiqueta.split(" ")[0].substring(1); // Extraemos el nombre
-
-        // Buscamos si el nombre de la etiqueta coincide con algún enum
-        for (TokenEnumHTML token : TokenEnumHTML.values()) {
-            if (token.getToken().equals(nombreEtiqueta)) {
-                // Reemplazamos la etiqueta original por la traducida
-                String etiquetaTraducida = "<" + token.getTraduccion();
-                // Si hay atributos, los mantenemos
-                String atributos = etiqueta.substring(nombreEtiqueta.length() + 1);
-                return etiquetaTraducida + atributos + ">";
-            }
-        }
-
-        return etiqueta; // Si no se encuentra, devuelve la etiqueta original
-    }
 }

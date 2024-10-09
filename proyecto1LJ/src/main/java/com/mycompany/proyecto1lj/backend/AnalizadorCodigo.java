@@ -20,6 +20,11 @@ public class AnalizadorCodigo {
     private final List<String> cssCode = new ArrayList<>();
     private final List<String> jsCode = new ArrayList<>();
 
+    private List<Token> TokensHTML;
+    private List<Token> TokensCSS;
+    private List<Token> TokensJS;
+    private String traduccion;
+
     // Analizadores individuales
     private AnalizadorHTML analizadorHTML;
     private AnalizadorCSS analizadorCSS;
@@ -31,8 +36,7 @@ public class AnalizadorCodigo {
 
     public void procesarCodigo(String codigo) {
         String[] lineas = codigo.split("\n");
-        String estadoActual = "";  
-o
+        String estadoActual = "";
         for (String linea : lineas) {
             if (linea.startsWith(">>[")) {
                 if (linea.contains("[html]")) {
@@ -73,6 +77,8 @@ o
             }
             this.analizadorHTML = new AnalizadorHTML(htmlBuilder.toString());
             this.analizadorHTML.analizar();
+            traduccion = this.analizadorHTML.getTraduccion();
+            TokensHTML = this.analizadorHTML.getTokens();
         }
 
     }
@@ -85,7 +91,7 @@ o
                 cssBuilder.append(linea).append("\n");
             }
             this.analizadorCSS = new AnalizadorCSS();
-            analizadorCSS.procesarLinea(cssBuilder.toString());
+            TokensCSS = analizadorCSS.procesarLinea(cssBuilder.toString());
         }
     }
 
@@ -97,7 +103,24 @@ o
                 jsBuilder.append(linea).append("\n");
             }
             analizadorJS = new AnalizadorJS();
-            analizadorJS.analizar(jsBuilder.toString());
+            TokensJS = analizadorJS.analizar(jsBuilder.toString());
         }
     }
+
+    public List<Token> getTokensCSS() {
+        return TokensCSS;
+    }
+
+    public List<Token> getTokensJS() {
+        return TokensJS;
+    }
+
+    public List<Token> getTokensHTML() {
+        return TokensHTML;
+    }
+
+    public String getTraduccion() {
+        return traduccion;
+    }
+
 }

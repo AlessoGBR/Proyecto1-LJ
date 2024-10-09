@@ -16,19 +16,29 @@ public class AnalizadorHTML {
 
     private String input;
     private int index;
-    private List<Token> tokens;  // Cambia de ArrayList<String> a ArrayList<Token>
+    private List<Token> tokens;  
+    private String traduccion;
 
     public AnalizadorHTML(String input) {
         this.input = input;
         this.index = 0;
         this.tokens = new ArrayList<>();  // Inicializa la lista de tokens
+    }    
+
+    public String getTraduccion() {
+        return traduccion;
+    }
+    
+    private void traducir() {
+        TraductorHTML tra = new TraductorHTML();
+        traduccion = tra.traducir(tokens);
     }
 
     public void analizar() {
         while (index < this.input.length()) {
             avanzar();
-        }
-
+        }        
+        traducir();
     }
 
     private void avanzar() {
@@ -41,12 +51,10 @@ public class AnalizadorHTML {
         switch (actual) {
             case '<':
                 if (!tokens.isEmpty() && tokens.get(tokens.size() - 1).getTypeHTML() == TokenEnumHTML.APERTURA) {
-                    // No agregar un nuevo token de apertura si ya existe uno consecutivo
                     index++;
                     identificarElemento();
                 } else {
-                    tokens.add(new Token(TokenEnumHTML.APERTURA, "<"));  // Agrega el token a la lista
-                    System.out.println("Token encontrado: <");
+                    tokens.add(new Token(TokenEnumHTML.APERTURA, "<")); 
                     index++;
                     identificarElemento();
                 }
@@ -54,29 +62,24 @@ public class AnalizadorHTML {
 
             case '>':
                 if (!tokens.isEmpty() && tokens.get(tokens.size() - 1).getTypeHTML() == TokenEnumHTML.CIERRE) {
-                    // No agregar un nuevo token de cierre si ya existe uno consecutivo
                     index++;
                 } else {
-                    tokens.add(new Token(TokenEnumHTML.CIERRE, ">"));  // Agrega el token a la lista
-                    System.out.println("Token encontrado: >");
+                    tokens.add(new Token(TokenEnumHTML.CIERRE, ">"));  
                     index++;
                 }
                 break;
 
             case '/':
                 if (!tokens.isEmpty() && tokens.get(tokens.size() - 1).getTypeHTML() == TokenEnumHTML.DIAGONAL) {
-                    // No agregar un nuevo token diagonal si ya existe uno consecutivo
                     index++;
                 } else {
-                    tokens.add(new Token(TokenEnumHTML.DIAGONAL, "/"));  // Agrega el token a la lista
-                    System.out.println("Token encontrado: /");
+                    tokens.add(new Token(TokenEnumHTML.DIAGONAL, "/")); 
                     index++;
                 }
                 break;
 
             case '=':
-                tokens.add(new Token(TokenEnumHTML.PALABRA_RESERVADA_IGUAL, "="));  // Agrega el token a la lista
-                System.out.println("Token encontrado: =");
+                tokens.add(new Token(TokenEnumHTML.PALABRA_RESERVADA_IGUAL, "="));  
                 index++;
                 break;
 
@@ -99,8 +102,7 @@ public class AnalizadorHTML {
 
         // Solo agrega el token si no es repetido
         if (tokens.isEmpty() || tokens.get(tokens.size() - 1).getTypeHTML() != tipoToken) {
-            tokens.add(new Token(tipoToken, token));  // Agrega el token a la lista
-            System.out.println("Token encontrado: " + tipoToken.getToken());
+            tokens.add(new Token(tipoToken, token));  
         }
 
         if (input.charAt(index) == ' ') {
@@ -108,14 +110,12 @@ public class AnalizadorHTML {
         }
 
         if (index < input.length() && input.charAt(index) == '/') {
-            tokens.add(new Token(TokenEnumHTML.DIAGONAL, "/"));  // Agrega el token a la lista
-            System.out.println("Token encontrado: /");
+            tokens.add(new Token(TokenEnumHTML.DIAGONAL, "/")); 
             index++;
         }
 
         if (index < input.length() && input.charAt(index) == '>') {
-            tokens.add(new Token(TokenEnumHTML.CIERRE, ">"));  // Agrega el token a la lista
-            System.out.println("Token encontrado: >");
+            tokens.add(new Token(TokenEnumHTML.CIERRE, ">"));  
             index++;
         }
     }
@@ -192,13 +192,11 @@ public class AnalizadorHTML {
             }
 
             if (atributo.length() > 0) {
-                tokens.add(new Token(TokenEnumHTML.ATRIBUTO, atributo.toString()));  // Agrega el token de atributo a la lista
-                System.out.println("Token de atributo encontrado: " + atributo.toString());
+                tokens.add(new Token(TokenEnumHTML.ATRIBUTO, atributo.toString())); 
             }
 
             if (index < input.length() && input.charAt(index) == '=') {
-                tokens.add(new Token(TokenEnumHTML.PALABRA_RESERVADA_IGUAL, "="));  // Agrega el token para '=' a la lista
-                System.out.println("Token encontrado: =");
+                tokens.add(new Token(TokenEnumHTML.PALABRA_RESERVADA_IGUAL, "="));
                 index++;
 
                 if (index < input.length() && input.charAt(index) == '"') {
@@ -211,8 +209,7 @@ public class AnalizadorHTML {
                 }
 
                 if (valorAtributo.length() > 0) {
-                    tokens.add(new Token(TokenEnumHTML.VALOR_ATRIBUTO, valorAtributo.toString()));  // Agrega el token de valor de atributo a la lista
-                    System.out.println("Token de valor de atributo encontrado: " + valorAtributo.toString());
+                    tokens.add(new Token(TokenEnumHTML.VALOR_ATRIBUTO, valorAtributo.toString())); 
                 }
             }
 
@@ -246,8 +243,7 @@ public class AnalizadorHTML {
         }
 
         if (texto.length() > 0) {
-            tokens.add(new Token(TokenEnumHTML.TEXTO, texto.toString()));  // Agrega el token de texto a la lista
-            System.out.println("Texto encontrado: " + texto.toString());
+            tokens.add(new Token(TokenEnumHTML.TEXTO, texto.toString()));  
         }
     }
 

@@ -149,7 +149,6 @@ public class AnalizadorJS {
         };
 
         tokens.add(new Token(token, tokenEnum));
-        System.out.println("Token encontrado: " + token);
     }
 
     public List<Token> getTokens() {

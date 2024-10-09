@@ -30,14 +30,14 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="bntSubir" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="btnOptimizar" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btnAnalizar" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="195" max="-2" attributes="0"/>
-                      <Component id="btnReporteJS" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="99" max="-2" attributes="0"/>
+                      <Component id="btnReporteToken" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnReporteCSS" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
-                      <Component id="btnReporteHTML" min="-2" max="-2" attributes="0"/>
+                      <Component id="btnReporteOptimizacion" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="btnReporteError" min="-2" max="-2" attributes="0"/>
                   </Group>
@@ -58,10 +58,10 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="bntSubir" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnAnalizar" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnReporteJS" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnReporteCSS" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnReporteHTML" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnReporteToken" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnReporteOptimizacion" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnReporteError" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnOptimizar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -179,37 +179,26 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bntSubirActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnReporteCSS">
+    <Component class="javax.swing.JButton" name="btnReporteOptimizacion">
       <Properties>
-        <Property name="text" type="java.lang.String" value="REPORTE CSS"/>
+        <Property name="text" type="java.lang.String" value="REPORTE OPTIMIZACION"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReporteCSSActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReporteOptimizacionActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="btnReporteHTML">
+    <Component class="javax.swing.JButton" name="btnReporteToken">
       <Properties>
-        <Property name="text" type="java.lang.String" value="REPORTE HTML"/>
+        <Property name="text" type="java.lang.String" value="REPORTE TOKENS"/>
         <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
           <Color id="Hand Cursor"/>
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReporteHTMLActionPerformed"/>
-      </Events>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnReporteJS">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="REPORTE JS"/>
-        <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-          <Color id="Hand Cursor"/>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReporteJSActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReporteTokenActionPerformed"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnReporteError">
@@ -221,6 +210,14 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnReporteErrorActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnOptimizar">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="OPTIMIZAR"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnOptimizarActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

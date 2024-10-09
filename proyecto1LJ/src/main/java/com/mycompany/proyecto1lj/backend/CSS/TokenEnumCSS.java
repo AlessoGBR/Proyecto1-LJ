@@ -115,6 +115,8 @@ public enum TokenEnumCSS {
     BRACKET_CLOSE("}"),
     PARENTHESIS_OPEN("("),
     PARENTHESIS_CLOSE(")"),
+    COMENTARIO("comentario"),
+    VALOR(""),
     ERROR("");
 
     private final String token;
