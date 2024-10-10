@@ -15,11 +15,13 @@ body {
 
 </style>
 <script>
-function showSection (sectionId ){const sections  = document .querySelectorAll ('#main-content >div' );
-sections .forEach (section  = >{section .style .display  = 'none' ;
+function showSection (sectionId ){
+const sections  = document .querySelectorAll ('#main-content >div' );
+sections .forEach (section  = >{
+section .style .display  = 'none' ;
 section .style .background  = 'red' ;
 });
-// Aplicar display a la section document .getElementById (sectionId ).style .display  = 'block' ;
+document .getElementById (sectionId ).style .display  = 'block' ;
 }showSection ('contact' );
 
 </script>
@@ -29,11 +31,8 @@ section .style .background  = 'red' ;
 <div class="container">
 <h1>Bienvenido a Mi Página</h1>
 <p>Explora nuestro contenido y conoce más sobre nosotros.</p>
-
- //END
 </div>
 </div>
-
 
 </body>
 </html>

@@ -32,7 +32,11 @@ public class ConvertirTokenAString {
                     break;
                 case PARENTESIS_ABIERTO:
                 case PARENTESIS_CERRADO:
+                    codigo.append(valor);
+                    break;
                 case LLAVE_ABIERTO:
+                    codigo.append(valor).append("\n");
+                    break;
                 case LLAVE_CERRADA:
                     codigo.append(valor);
                     break;
@@ -49,20 +53,17 @@ public class ConvertirTokenAString {
                     codigo.append(valor).append("\n");
                     break;
                 case COMENTARIO:
-                    // Agregar el comentario en una nueva línea
                     codigo.append(valor).append("\n");
-                    esComentario = true; // Marcamos que estamos en un comentario
+                    esComentario = true;
                     break;
                 default:
-                    // En caso de otro tipo de token, simplemente lo añadimos
                     codigo.append(valor).append(" ");
                     break;
             }
 
-            // Si hemos encontrado un comentario, hacemos un salto de línea después
             if (esComentario) {
-                codigo.append("\n"); // Aseguramos un salto de línea después de un comentario.
-                esComentario = false; // Reiniciamos la bandera
+                codigo.append("\n");
+                esComentario = false;
             }
         }
 
@@ -148,28 +149,23 @@ public class ConvertirTokenAString {
                 case FLOAT:
                 case LIST_STYLE:
                 case AUTO:
-                    // Agregar la propiedad con la indentación correspondiente
                     sb.append(getIndentation(indentLevel))
                             .append(token.getValue()).append(" ");
                     break;
 
                 case BRACKET_CLOSE:
-                    // Disminuir el nivel de indentación y añadir la llave cerrada
                     indentLevel--;
                     sb.append(getIndentation(indentLevel)).append("}\n");
                     break;
-               case COLON:
-                    // Agregar el signo ":" después del nombre de la propiedad
+                case COLON:
                     sb.append(token.getValue());
                     break;
 
                 case VALOR:
-                    // Agregar el valor de la propiedad
-                    sb.append(token.getValue()).append(";\n"); 
+                    sb.append(token.getValue()).append(";\n");
                     break;
 
                 case COMENTARIO:
-                    // Manejar comentarios si es necesario
                     sb.append(getIndentation(indentLevel)).append("/* ").append(token.getValue()).append(" */\n");
                     break;
 

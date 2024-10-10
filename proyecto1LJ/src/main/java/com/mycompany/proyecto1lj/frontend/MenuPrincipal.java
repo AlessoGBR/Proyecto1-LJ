@@ -258,10 +258,7 @@ public class MenuPrincipal extends javax.swing.JFrame {
             List<String> codigoSinOptimizar = new ArrayList<>();
             String[] lineas = contenido.split("\n");
             codigoSinOptimizar.addAll(Arrays.asList(lineas));
-            //optimizarCodigo();
             OptimizarCodigo optimizar = new OptimizarCodigo();
-            //resultadoOpti = optimizar.optimizarCodigo(codigoSinOptimizar, TokensOptimizados);
-            //TokensOptimizados = resultadoOpti.getTokensOptimizados();
             JOptionPane.showMessageDialog(null, "CODIGO OPTIMIZADO", "SUCCES", JOptionPane.INFORMATION_MESSAGE);
             txtCodigo.setText(optimizar.optimizarCodigo(codigoSinOptimizar));
         } else {

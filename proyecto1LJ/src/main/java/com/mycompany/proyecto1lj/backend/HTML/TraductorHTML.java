@@ -22,8 +22,8 @@ public class TraductorHTML {
         traducciones.put("encabezado", "header");
         traducciones.put("navegacion", "nav");
         traducciones.put("apartado", "aside");
-        traducciones.put("listaordenada", "ul");
-        traducciones.put("listadesordenada", "ol");
+        traducciones.put("listaordenada", "ol");
+        traducciones.put("listadesordenada", "ul");
         traducciones.put("itemlista", "li");
         traducciones.put("anclaje", "a");
         traducciones.put("contenedor", "div");
