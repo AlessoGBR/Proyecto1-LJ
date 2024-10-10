@@ -146,44 +146,11 @@ public class ReporteOptimizacion extends javax.swing.JFrame {
 
         JScrollPane scrollPane = new JScrollPane(tabla);
 
-        for (Token token : listaTokens) {
-            String lenguaje = determinarLenguaje(token);
-            String tipoToken = determinarTipo(token);
-
-            model.addRow(new Object[]{
-                token.getValue(), // TOKEN
-                token.getValue(), // EXPRESIÓN REGULAR (simulada como el valor del token)
-                lenguaje, // LENGUAJE (HTML, CSS, JavaScript)
-                tipoToken // TIPO de token
-            });
-        }
-
         tabla.setEnabled(false);
         panel.add(scrollPane, BorderLayout.CENTER);
         panel.repaint();
     }
 
-    private String determinarLenguaje(Token token) {
-        if (token.getTypeHTML() != null) {
-            return "HTML";
-        } else if (token.getTypeCSS() != null) {
-            return "CSS";
-        } else if (token.getTypeJS() != null) {
-            return "JavaScript";
-        }
-        return "Desconocido";
-    }
-
-    private String determinarTipo(Token token) {
-        if (token.getTypeHTML() != null) {
-            return token.getTypeHTML().name();
-        } else if (token.getTypeCSS() != null) {
-            return token.getTypeCSS().name();
-        } else if (token.getTypeJS() != null) {
-            return token.getTypeJS().name();
-        }
-        return "Texto";
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnGenerar;
